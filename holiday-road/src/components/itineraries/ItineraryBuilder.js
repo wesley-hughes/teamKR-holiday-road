@@ -8,12 +8,14 @@ export const ItineraryBuilder = () => {
   const [park , setPark] = useState({})
   const [biz , setBiz] = useState({})
   const [eatery , setEatery] = useState({})
-  const [itinerary, setItinerary] = useState({
+  const [itinerary, setItinerary] = useState(
+    {
     parkId: "",
     bizId: "",
     eateryId: "",
     userId: ""
-  });
+  }
+  );
 
   useEffect(() => {
     getParks()
@@ -23,14 +25,18 @@ export const ItineraryBuilder = () => {
 
   //firing on mount which is returning just first object, then fires again but should NOT have to click it twice to make it work
 
-  useEffect(() => {
-    if(itinerary.parkId === null){  }
-      else{
-    getParkById(itinerary.parkId)
-    .then(park => setPark(park.data[0]))}
-    console.log(park)
-  },[itinerary])
+  //run onchange instead of use effect?
+
+  // useEffect(() => {
+  //   if(itinerary.parkId === null){  }
+  //     else{
+  //   getParkById(itinerary.parkId)
+  //   .then(park => setPark(park.data))}
+  //   console.log(park)
+  // },[itinerary])
   
+//broke it more-- changed onchange in parks select to include get park by id and commented out use effect, so console log stopped returning
+
   const handleInputItinerary = (event) => {
     const newItinerary = { ...itinerary };
     newItinerary[event.target.id] = event.target.value;
@@ -43,7 +49,11 @@ export const ItineraryBuilder = () => {
   return (
     <>
       <h2>List of Parks</h2>
-      <select id="parkId" onChange={handleInputItinerary}>
+      <select id="parkId" onChange={(event) => {
+        handleInputItinerary(event)
+        getParkById(event.target.value)
+        .then(park => setPark(park.data)) 
+         }}>      
         <option value="0">Choose Park</option>
         {parks.map((park) => (
           <option key={`park--${park.id}`} value={`${park.id}`} >
