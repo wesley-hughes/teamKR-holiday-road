@@ -1,16 +1,16 @@
 import { Outlet, Route, Routes } from "react-router-dom";
-import { ParksList } from "./parks/ParksList";
-import { ParkProvider } from "./parks/ParksProvider";
+import { ItineraryBuilder} from "./itineraries/ItineraryBuilder";
+import { Provider } from "./itineraries/Provider";
 
 
 export const ApplicationView = () => {
   return (
-    <ParkProvider>
+    <Provider>
       <Routes>
         <Route path="/" element={<Outlet />}>
-          <Route path="/parks" element={<ParksList />} />
+          <Route path="/itinerary/builder" element={<ItineraryBuilder />} />
         </Route>
       </Routes>
-    </ParkProvider>
+    </Provider>
   );
 };
