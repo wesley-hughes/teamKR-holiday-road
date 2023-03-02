@@ -34,32 +34,25 @@ const parkDialog = useRef()
 const bizDialog = useRef()
 const eateryDialog = useRef()
 
-//TRYING MODAL IMPLEMENTATION
-const [parkModal, setParkModal] = useState(false)
-const [bizModal, setBizModal] = useState(false)
-const [eateryModal, setEateryModal] = useState(false)
+const [modal, setModal] = useState(false)
 
   useEffect(() => {
     getParks().then(getBizs()).then(getEateries());
   }, []);
 
-  useEffect(() => {
-    if (parkModal) {
+  const whichDetailClicked = (e) => {
+    const detailClicked = e.target.value
+    if (detailClicked === "parkDetails") {
+      setModal(true)
       parkDialog.current.showModal()
-    }
-  },[parkModal])
-
-  useEffect(() => {
-    if (bizModal) {
-      bizDialog.current.showModal()
-    }
-  },[bizModal])
-
-  useEffect(() => {
-    if (eateryModal) {
-      eateryDialog.current.showModal()
-    }
-  },[eateryModal])
+    } else if (detailClicked === "bizDetails") {
+        setModal(true)
+        bizDialog.current.showModal()
+      } else if (detailClicked === "eateryDetails") {
+        setModal(true)
+        eateryDialog.current.showModal()
+      }
+  }
 
   useEffect(() => {
     getParkById(itinerary.parkId)
@@ -122,18 +115,18 @@ const [eateryModal, setEateryModal] = useState(false)
       <h2>Itinerary Preview</h2>
       <div>
         Park: {selectPark.fullName} <button type="button" value="parkDetails"
-        onClick={(e) =>
-        setParkModal(true)
-         }
+        onClick={(e) => {
+        whichDetailClicked(e)
+        }}
         >Details</button>
         Bizarrerie: {biz.name} <button type="button" value="bizDetails"
         onClick={(e) =>
-          setBizModal(true)
+          whichDetailClicked(e)
            }
          >Details</button>
         Eatery: {eatery.businessName} <button type="button" value="eateryDetails" 
         onClick={(e) =>
-          setEateryModal(true)
+          whichDetailClicked(e)
            }>Details</button>
       </div>
       <button
@@ -190,21 +183,21 @@ const [eateryModal, setEateryModal] = useState(false)
         <button className="button--close"
         onClick={(e) => {
           parkDialog.current.close()
-        setParkModal(false)}}>Close</button>
+        setModal(false)}}>Close</button>
       </dialog>
       <dialog ref={bizDialog}>
         <div>{biz.description}</div>
         <button className="button--close"
         onClick={(e) => {
           bizDialog.current.close()
-          setBizModal(false)}}>Close</button>
+          setModal(false)}}>Close</button>
       </dialog>
       <dialog ref={eateryDialog}>
         <div>{eatery.description}</div>
         <button className="button--close"
         onClick={(e) => {
         eateryDialog.current.close()
-        setEateryModal(false)
+        setModal(false)
         }}>Close</button>
       </dialog>
     </>
