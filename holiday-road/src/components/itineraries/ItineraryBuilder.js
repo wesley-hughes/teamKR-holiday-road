@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TripContext } from "./Provider";
+import { SavedItineraries } from "./SavedItineraries";
 
 export const ItineraryBuilder = () => {
   const {
@@ -23,6 +24,7 @@ export const ItineraryBuilder = () => {
   const [selectPark , setSelectPark] = useState({})
   const [biz , setBiz] = useState({})
   const [eatery , setEatery] = useState({})
+  const [filteredItin, setFilteredItin ] = useState([])
   const [itinerary, setItinerary] = useState(
     {
     parkId: "",
@@ -36,9 +38,16 @@ const eateryDialog = useRef()
 
 const [modal, setModal] = useState(false)
 
+const holidayUserObj = JSON.parse(localStorage.getItem("holiday_user"))
+
   useEffect(() => {
-    getParks().then(getBizs()).then(getEateries());
+    getParks().then(getBizs()).then(getEateries()).then(getItineraries());
   }, []);
+
+  useEffect(() => {
+    const myItin = itineraries.filter(itin => itin.userId === holidayUserObj.id)
+    setFilteredItin(myItin)
+},[itineraries])
 
   const whichDetailClicked = (e) => {
     const detailClicked = e.target.value
@@ -56,24 +65,37 @@ const [modal, setModal] = useState(false)
 
   useEffect(() => {
     getParkById(itinerary.parkId)
-    .then(newPark => setSelectPark(newPark.data[0]))
+    .then(thisPark => setSelectPark(thisPark))
     .then(getBizById(itinerary.bizId)
     .then(thisBiz => setBiz(thisBiz)))
     .then(getEateryById(itinerary.eateryId)
     .then(thisEatery => setEatery(thisEatery)))
   },[itinerary])
 
-  useEffect(() => {
-    const lat = parseFloat(selectPark.latitude).toFixed(4)
-    const long = parseFloat(selectPark.longitude).toFixed(4)
-    getForecast(lat, long)
-  }, [selectPark])
+  // useEffect(() => {
+  //   const lat = parseFloat(selectPark.latitude).toFixed(4)
+  //   const long = parseFloat(selectPark.longitude).toFixed(4)
+  //   getForecast(lat, long)
+  // }, [selectPark])
 
   const handleInputItinerary = (event) => {
     const newItinerary = { ...itinerary };
     newItinerary[event.target.id] = event.target.value;
+    // newItinerary[event.target.title] = event.target.name
     setItinerary(newItinerary)
   };
+
+  const handleSaveItinerary = (event) => {
+
+    const newItinerary = {
+      parkId: itinerary.parkId,
+      bizId: parseInt(itinerary.bizId),
+      eateryId: parseInt(itinerary.eateryId),
+      userId: holidayUserObj.id
+    }
+    saveNewItinerary(newItinerary)
+    // .then(() => navigate("/itinerary/saved"))
+  }
 
   if (parks === 0) {
     return null;
@@ -84,7 +106,7 @@ const [modal, setModal] = useState(false)
       <select id="parkId" onChange={(event) => {
         handleInputItinerary(event)
          }}>      
-        <option value="0">Choose Park</option>
+        <option name="" value="0">Choose Park</option>
         {parks.map((park) => (
           <option key={`park--${park.id}`} value={`${park.id}`}>
             {park.fullName}
@@ -132,12 +154,19 @@ const [modal, setModal] = useState(false)
       <button
         type="button"
         onClick={(event) => {
-          saveNewItinerary(itinerary);
+          handleSaveItinerary(event);
         }}
       >
         Save Itinerary
       </button>
-      {
+
+      <h2>Saved Itineraries</h2>  
+      <article className="savedItin">
+        {filteredItin.map((savedItin) => <SavedItineraries key={`myItin--${savedItin.id}`}
+        // Need to pass down props of all matching names
+        />)}
+      </article>
+      {/* {
         itinerary.parkId !== "" ?
         <>
         <h2>5 Day Forecast for {selectPark.fullName}</h2>
@@ -177,7 +206,7 @@ const [modal, setModal] = useState(false)
         </table>
         </> :
         ""
-      }
+      } */}
       <dialog ref={parkDialog}>
         <div>{selectPark.description}</div>
         <button className="button--close"
