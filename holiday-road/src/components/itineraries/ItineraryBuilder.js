@@ -16,6 +16,8 @@ export const ItineraryBuilder = () => {
     saveNewItinerary,
     getItineraries,
     itineraries,
+    forecast,
+    getForecast
   } = useContext(TripContext);
   const navigate = useNavigate();
   const [selectPark , setSelectPark] = useState({})
@@ -42,6 +44,12 @@ export const ItineraryBuilder = () => {
     .then(getEateryById(itinerary.eateryId)
     .then(thisEatery => setEatery(thisEatery)))
   },[itinerary])
+
+  useEffect(() => {
+    const lat = parseFloat(selectPark.latitude).toFixed(4)
+    const long = parseFloat(selectPark.longitude).toFixed(4)
+    getForecast(lat, long)
+  }, [selectPark])
 
   const handleInputItinerary = (event) => {
     const newItinerary = { ...itinerary };
@@ -100,6 +108,14 @@ export const ItineraryBuilder = () => {
       >
         Save Itinerary
       </button>
+      {
+        itinerary.parkId !== "" ?
+        <>
+        <h2>Weather for {selectPark.fullName}</h2>
+        {forecast.daily.temperature_2m_max[0]}
+        </> :
+        ""
+      }
     </>
   );
 };

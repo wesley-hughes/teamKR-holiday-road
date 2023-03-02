@@ -7,7 +7,7 @@ export const Provider = (props) => {
   const [bizs, setBizs] = useState([])
   const [eateries, setEateries] = useState([])
   const [itineraries, setItineraries] = useState([])
-
+  const [forecast, setForecast] = useState([])
 
   const getParks = () => {
     return fetch(
@@ -62,10 +62,15 @@ const getItineraries = () => {
   .then(res => setItineraries(res))
 }
 
+const getForecast = (lat, long) => {
+  return fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&elevation=nan&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_min&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=America%2FChicago`)
+    .then(response => response.json())
+    .then(data => setForecast(data))
+}
 
   return (
     <TripContext.Provider
-    value={{getParks, parks, getBizs, bizs, getEateries, eateries, getEateryById, getBizById, getParkById, saveNewItinerary, getItineraries, itineraries}}>
+    value={{getParks, parks, getBizs, bizs, getEateries, eateries, getEateryById, getBizById, getParkById, saveNewItinerary, getItineraries, itineraries, forecast, getForecast}}>
       {props.children}
     </TripContext.Provider>
   )
