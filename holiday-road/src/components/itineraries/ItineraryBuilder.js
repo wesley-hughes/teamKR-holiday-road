@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TripContext } from "./Provider";
 
@@ -28,11 +28,36 @@ export const ItineraryBuilder = () => {
     eateryId: "",
     userId: "",
   });
+const parkDialog = useRef()
+const bizDialog = useRef()
+const eateryDialog = useRef()
+
+//TRYING MODAL IMPLEMENTATION
+const [parkModal, setParkModal] = useState(false)
+const [bizModal, setBizModal] = useState(false)
+const [eateryModal, setEateryModal] = useState(false)
 
   useEffect(() => {
     getParks().then(getBizs()).then(getEateries());
   }, []);
 
+  useEffect(() => {
+    if (parkModal) {
+      parkDialog.current.showModal()
+    }
+  },[parkModal])
+
+  useEffect(() => {
+    if (bizModal) {
+      bizDialog.current.showModal()
+    }
+  },[bizModal])
+
+  useEffect(() => {
+    if (eateryModal) {
+      eateryDialog.current.showModal()
+    }
+  },[eateryModal])
 
   useEffect(() => {
     getParkById(itinerary.parkId)
@@ -88,9 +113,20 @@ export const ItineraryBuilder = () => {
 
       <h2>Itinerary Preview</h2>
       <div>
-        Park: {selectPark.fullName} <button type="button" >Details</button>
-        Bizarrerie: {biz.name} <button type="button" >Details</button>
-        Eatery: {eatery.businessName} <button type="button" >Details</button>
+        Park: {selectPark.fullName} <button type="button" value="parkDetails"
+        onClick={(e) =>
+        setParkModal(true)
+         }
+        >Details</button>
+        Bizarrerie: {biz.name} <button type="button" value="bizDetails"
+        onClick={(e) =>
+          setBizModal(true)
+           }
+         >Details</button>
+        Eatery: {eatery.businessName} <button type="button" value="eateryDetails" 
+        onClick={(e) =>
+          setEateryModal(true)
+           }>Details</button>
       </div>
       <button
         type="button"
@@ -100,6 +136,28 @@ export const ItineraryBuilder = () => {
       >
         Save Itinerary
       </button>
+      <dialog ref={parkDialog}>
+        <div>{selectPark.description}</div>
+        <button className="button--close"
+        onClick={(e) => {
+          parkDialog.current.close()
+        setParkModal(false)}}>Close</button>
+      </dialog>
+      <dialog ref={bizDialog}>
+        <div>{biz.description}</div>
+        <button className="button--close"
+        onClick={(e) => {
+          bizDialog.current.close()
+          setBizModal(false)}}>Close</button>
+      </dialog>
+      <dialog ref={eateryDialog}>
+        <div>{eatery.description}</div>
+        <button className="button--close"
+        onClick={(e) => {
+        eateryDialog.current.close()
+        setEateryModal(false)
+        }}>Close</button>
+      </dialog>
     </>
   );
 };
