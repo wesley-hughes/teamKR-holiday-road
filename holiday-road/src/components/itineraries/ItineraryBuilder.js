@@ -3,25 +3,34 @@ import { useNavigate } from "react-router-dom";
 import { TripContext } from "./Provider";
 
 export const ItineraryBuilder = () => {
-  const { getParks, parks, getBizs, bizs, getEateries, eateries, getEateryById, getBizById, getParkById, saveNewItinerary, getItineraries, itineraries } = useContext(TripContext);
+  const {
+    getParks,
+    parks,
+    getBizs,
+    bizs,
+    getEateries,
+    eateries,
+    getEateryById,
+    getBizById,
+    getParkById,
+    saveNewItinerary,
+    getItineraries,
+    itineraries,
+  } = useContext(TripContext);
   const navigate = useNavigate();
-  const [park , setPark] = useState({})
-  const [biz , setBiz] = useState({})
-  const [eatery , setEatery] = useState({})
-  const [itinerary, setItinerary] = useState(
-    {
+  const [park, setPark] = useState({});
+  const [biz, setBiz] = useState({});
+  const [eatery, setEatery] = useState({});
+  const [itinerary, setItinerary] = useState({
     parkId: "",
     bizId: "",
     eateryId: "",
-    userId: ""
-  }
-  );
+    userId: "",
+  });
 
   useEffect(() => {
-    getParks()
-    .then(getBizs())
-    .then(getEateries())
-  }, [])
+    getParks().then(getBizs()).then(getEateries());
+  }, []);
 
   //firing on mount which is returning just first object, then fires again but should NOT have to click it twice to make it work
 
@@ -34,8 +43,8 @@ export const ItineraryBuilder = () => {
   //   .then(park => setPark(park.data))}
   //   console.log(park)
   // },[itinerary])
-  
-//broke it more-- changed onchange in parks select to include get park by id and commented out use effect, so console log stopped returning
+
+  //broke it more-- changed onchange in parks select to include get park by id and commented out use effect, so console log stopped returning
 
   const handleInputItinerary = (event) => {
     const newItinerary = { ...itinerary };
@@ -49,14 +58,16 @@ export const ItineraryBuilder = () => {
   return (
     <>
       <h2>List of Parks</h2>
-      <select id="parkId" onChange={(event) => {
-        handleInputItinerary(event)
-        getParkById(event.target.value)
-        .then(park => setPark(park.data)) 
-         }}>      
+      <select
+        id="parkId"
+        onChange={(event) => {
+          handleInputItinerary(event);
+          getParkById(event.target.value).then((park) => setPark(park.data));
+        }}
+      >
         <option value="0">Choose Park</option>
         {parks.map((park) => (
-          <option key={`park--${park.id}`} value={`${park.id}`} >
+          <option key={`park--${park.id}`} value={`${park.id}`}>
             {park.fullName}
           </option>
         ))}
@@ -66,7 +77,7 @@ export const ItineraryBuilder = () => {
       <select id="bizId" onChange={handleInputItinerary}>
         <option value="0">Choose Bizarrary</option>
         {bizs.map((biz) => (
-          <option key={`biz--${biz.id}`} value={`${biz.id}`} >
+          <option key={`biz--${biz.id}`} value={`${biz.id}`}>
             {biz.name}
           </option>
         ))}
@@ -76,23 +87,26 @@ export const ItineraryBuilder = () => {
       <select id="eateryId" onChange={handleInputItinerary}>
         <option value="0">Choose Eatery</option>
         {eateries.map((eatery) => (
-          <option key={`eatery--${eatery.id}`} value={`${eatery.id}`} >
+          <option key={`eatery--${eatery.id}`} value={`${eatery.id}`}>
             {eatery.businessName}
           </option>
         ))}
       </select>
-      
 
       <h2>Itinerary Preview</h2>
       <div>
-        Park: {
-
-        }
+        Park: {}
         Bizarrary: {}
         Eatery: {}
       </div>
-      <button type="button" onClick={(event) => {saveNewItinerary(itinerary)}}>Save Itinerary</button>
-      
+      <button
+        type="button"
+        onClick={(event) => {
+          saveNewItinerary(itinerary);
+        }}
+      >
+        Save Itinerary
+      </button>
     </>
   );
 };
