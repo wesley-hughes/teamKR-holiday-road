@@ -63,7 +63,7 @@ const getItineraries = () => {
 }
 
 const getForecast = (lat, long) => {
-  return fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&elevation=nan&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_min&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=America%2FChicago`)
+  return fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&elevation=nan&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_mean&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=America%2FChicago`)
     .then(response => response.json())
     .then(data => setForecast(data))
 }
