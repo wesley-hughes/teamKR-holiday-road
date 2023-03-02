@@ -3,7 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { TripContext } from "./Provider";
 
 export const ItineraryBuilder = () => {
-  const { getParks, parks, getBizs, bizs, getEateries, eateries, getEateryById, getBizById, getParkById, saveNewItinerary, getItineraries, itineraries } = useContext(TripContext);
+  const {
+    getParks,
+    parks,
+    getBizs,
+    bizs,
+    getEateries,
+    eateries,
+    getEateryById,
+    getBizById,
+    getParkById,
+    saveNewItinerary,
+    getItineraries,
+    itineraries,
+  } = useContext(TripContext);
   const navigate = useNavigate();
   const [selectPark , setSelectPark] = useState({})
   const [biz , setBiz] = useState({})
@@ -13,15 +26,12 @@ export const ItineraryBuilder = () => {
     parkId: "",
     bizId: "",
     eateryId: "",
-    userId: ""
-  }
-  );
+    userId: "",
+  });
 
   useEffect(() => {
-    getParks()
-    .then(getBizs())
-    .then(getEateries())
-  }, [])
+    getParks().then(getBizs()).then(getEateries());
+  }, []);
 
 
   useEffect(() => {
@@ -50,17 +60,17 @@ export const ItineraryBuilder = () => {
          }}>      
         <option value="0">Choose Park</option>
         {parks.map((park) => (
-          <option key={`park--${park.id}`} value={`${park.id}`} >
+          <option key={`park--${park.id}`} value={`${park.id}`}>
             {park.fullName}
           </option>
         ))}
       </select>
 
-      <h2>List of Bizarraries</h2>
+      <h2>List of Bizarreries</h2>
       <select id="bizId" onChange={handleInputItinerary}>
-        <option value="0">Choose Bizarrary</option>
+        <option value="0">Choose Bizarrerie</option>
         {bizs.map((biz) => (
-          <option key={`biz--${biz.id}`} value={`${biz.id}`} >
+          <option key={`biz--${biz.id}`} value={`${biz.id}`}>
             {biz.name}
           </option>
         ))}
@@ -70,21 +80,26 @@ export const ItineraryBuilder = () => {
       <select id="eateryId" onChange={handleInputItinerary}>
         <option value="0">Choose Eatery</option>
         {eateries.map((eatery) => (
-          <option key={`eatery--${eatery.id}`} value={`${eatery.id}`} >
+          <option key={`eatery--${eatery.id}`} value={`${eatery.id}`}>
             {eatery.businessName}
           </option>
         ))}
       </select>
-      
 
       <h2>Itinerary Preview</h2>
       <div>
         Park: {selectPark.fullName} <button type="button" >Details</button>
-        Bizarrary: {biz.name} <button type="button" >Details</button>
+        Bizarrerie: {biz.name} <button type="button" >Details</button>
         Eatery: {eatery.businessName} <button type="button" >Details</button>
       </div>
-      <button type="button" onClick={(event) => {saveNewItinerary(itinerary)}}>Save Itinerary</button>
-      
+      <button
+        type="button"
+        onClick={(event) => {
+          saveNewItinerary(itinerary);
+        }}
+      >
+        Save Itinerary
+      </button>
     </>
   );
 };
