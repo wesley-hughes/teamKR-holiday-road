@@ -66,9 +66,9 @@ export const ItineraryBuilder = () => {
         ))}
       </select>
 
-      <h2>List of Bizarraries</h2>
+      <h2>List of Bizarreries</h2>
       <select id="bizId" onChange={handleInputItinerary}>
-        <option value="0">Choose Bizarrary</option>
+        <option value="0">Choose Bizarrerie</option>
         {bizs.map((biz) => (
           <option key={`biz--${biz.id}`} value={`${biz.id}`}>
             {biz.name}
@@ -89,7 +89,7 @@ export const ItineraryBuilder = () => {
       <h2>Itinerary Preview</h2>
       <div>
         Park: {selectPark.fullName} <button type="button" >Details</button>
-        Bizarrary: {biz.name} <button type="button" >Details</button>
+        Bizarrerie: {biz.name} <button type="button" >Details</button>
         Eatery: {eatery.businessName} <button type="button" >Details</button>
       </div>
       <button
