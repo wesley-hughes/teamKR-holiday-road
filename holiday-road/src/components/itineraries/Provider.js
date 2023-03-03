@@ -11,7 +11,7 @@ export const Provider = (props) => {
 
   const getParks = () => {
     return fetch(
-      `https://developer.nps.gov/api/v1/parks?api_key=cpgenrjIn3P0KlHF5j7jyaxeyCZ5dAUDNegzuiDg&limit=468`
+      `https://developer.nps.gov/api/v1/parks?api_key=Uicno4BU7DEJYAVO50Jml7PdHax8TwXgwcryg2KX&limit=468`
       )
       .then((res) => res.json())
       .then(res => setParks(res.data));
@@ -19,9 +19,10 @@ export const Provider = (props) => {
   
   const getParkById = (parkId) => {
     return fetch(
-      `https://developer.nps.gov/api/v1/parks?api_key=cpgenrjIn3P0KlHF5j7jyaxeyCZ5dAUDNegzuiDg&id=${parkId}`
+      `https://developer.nps.gov/api/v1/parks?api_key=Uicno4BU7DEJYAVO50Jml7PdHax8TwXgwcryg2KX&id=${parkId}`
     )
       .then((res) => res.json())
+      .then(newPark => newPark.data[0])
   };
 
 const getBizs = () => {

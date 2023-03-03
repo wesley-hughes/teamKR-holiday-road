@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TripContext } from "./Provider";
 import { Weather } from "./Weather";
+import { SavedItineraries } from "./SavedItineraries";
 
 export const ItineraryBuilder = () => {
   const {
@@ -24,6 +25,7 @@ export const ItineraryBuilder = () => {
   const [selectPark , setSelectPark] = useState({})
   const [biz , setBiz] = useState({})
   const [eatery , setEatery] = useState({})
+  const [filteredItin, setFilteredItin ] = useState([])
   const [itinerary, setItinerary] = useState(
     {
     parkId: "",
@@ -35,36 +37,36 @@ const parkDialog = useRef()
 const bizDialog = useRef()
 const eateryDialog = useRef()
 
-//TRYING MODAL IMPLEMENTATION
-const [parkModal, setParkModal] = useState(false)
-const [bizModal, setBizModal] = useState(false)
-const [eateryModal, setEateryModal] = useState(false)
+const [modal, setModal] = useState(false)
+
+const holidayUserObj = JSON.parse(localStorage.getItem("holiday_user"))
 
   useEffect(() => {
-    getParks().then(getBizs()).then(getEateries());
+    getParks().then(getBizs()).then(getEateries()).then(getItineraries());
   }, []);
 
   useEffect(() => {
-    if (parkModal) {
+    const myItin = itineraries.filter(itin => itin.userId === holidayUserObj.id)
+    setFilteredItin(myItin)
+},[itineraries])
+
+  const whichDetailClicked = (e) => {
+    const detailClicked = e.target.value
+    if (detailClicked === "parkDetails") {
+      setModal(true)
       parkDialog.current.showModal()
-    }
-  },[parkModal])
-
-  useEffect(() => {
-    if (bizModal) {
-      bizDialog.current.showModal()
-    }
-  },[bizModal])
-
-  useEffect(() => {
-    if (eateryModal) {
-      eateryDialog.current.showModal()
-    }
-  },[eateryModal])
+    } else if (detailClicked === "bizDetails") {
+        setModal(true)
+        bizDialog.current.showModal()
+      } else if (detailClicked === "eateryDetails") {
+        setModal(true)
+        eateryDialog.current.showModal()
+      }
+  }
 
   useEffect(() => {
     getParkById(itinerary.parkId)
-    .then(newPark => setSelectPark(newPark.data[0]))
+    .then(thisPark => setSelectPark(thisPark))
     .then(() => {
       const lat = parseFloat(selectPark.latitude).toFixed(4)
       const long = parseFloat(selectPark.longitude).toFixed(4)
@@ -79,8 +81,21 @@ const [eateryModal, setEateryModal] = useState(false)
   const handleInputItinerary = (event) => {
     const newItinerary = { ...itinerary };
     newItinerary[event.target.id] = event.target.value;
+    // newItinerary[event.target.title] = event.target.name
     setItinerary(newItinerary)
   };
+
+  const handleSaveItinerary = (event) => {
+
+    const newItinerary = {
+      parkId: itinerary.parkId,
+      bizId: parseInt(itinerary.bizId),
+      eateryId: parseInt(itinerary.eateryId),
+      userId: holidayUserObj.id
+    }
+    saveNewItinerary(newItinerary)
+    // .then(() => navigate("/itinerary/saved"))
+  }
 
   if (parks === 0) {
     return null;
@@ -91,7 +106,7 @@ const [eateryModal, setEateryModal] = useState(false)
       <select id="parkId" onChange={(event) => {
         handleInputItinerary(event)
          }}>      
-        <option value="0">Choose Park</option>
+        <option name="" value="0">Choose Park</option>
         {parks.map((park) => (
           <option key={`park--${park.id}`} value={`${park.id}`}>
             {park.fullName}
@@ -122,28 +137,37 @@ const [eateryModal, setEateryModal] = useState(false)
       <h2>Itinerary Preview</h2>
       <div>
         Park: {selectPark.fullName} <button type="button" value="parkDetails"
-        onClick={(e) =>
-        setParkModal(true)
-         }
+        onClick={(e) => {
+        whichDetailClicked(e)
+        }}
         >Details</button>
         Bizarrerie: {biz.name} <button type="button" value="bizDetails"
         onClick={(e) =>
-          setBizModal(true)
+          whichDetailClicked(e)
            }
          >Details</button>
         Eatery: {eatery.businessName} <button type="button" value="eateryDetails" 
         onClick={(e) =>
-          setEateryModal(true)
+          whichDetailClicked(e)
            }>Details</button>
       </div>
       <button
         type="button"
         onClick={(event) => {
-          saveNewItinerary(itinerary);
+          handleSaveItinerary(event);
         }}
       >
         Save Itinerary
       </button>
+
+      <h2>Saved Itineraries</h2>  
+      <article className="savedItin">
+        {
+        filteredItin.map((savedItin) => <SavedItineraries key={`myItin--${savedItin.id}`}
+        thisItin={savedItin}
+                />)
+        }
+      </article>
       {
         itinerary.parkId !== "" ?
         <Weather park={selectPark} forecast={forecast} /> :
@@ -154,21 +178,21 @@ const [eateryModal, setEateryModal] = useState(false)
         <button className="button--close"
         onClick={(e) => {
           parkDialog.current.close()
-        setParkModal(false)}}>Close</button>
+        setModal(false)}}>Close</button>
       </dialog>
       <dialog ref={bizDialog}>
         <div>{biz.description}</div>
         <button className="button--close"
         onClick={(e) => {
           bizDialog.current.close()
-          setBizModal(false)}}>Close</button>
+          setModal(false)}}>Close</button>
       </dialog>
       <dialog ref={eateryDialog}>
         <div>{eatery.description}</div>
         <button className="button--close"
         onClick={(e) => {
         eateryDialog.current.close()
-        setEateryModal(false)
+        setModal(false)
         }}>Close</button>
       </dialog>
     </>
