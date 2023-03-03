@@ -269,6 +269,7 @@ export const ItineraryBuilder = () => {
         <article className="savedItin">
           {filteredItin.map((savedItin) => (
             <SavedItineraries
+              savedItinId={savedItin.id}
               key={`myItin--${savedItin.id}`}
               thisItin={savedItin}
               bizId={savedItin.bizId}
