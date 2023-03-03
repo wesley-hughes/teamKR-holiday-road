@@ -5,9 +5,30 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding: 20px;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.header {
+  @apply text-2xl text-gray-700 font-semibold;
+}
+
+.button {
+  @apply w-14 text-center mb-3 text-xs bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 border border-gray-400 rounded shadow;
+}
+
+.button__save {
+  @apply bg-[#F19953] hover:bg-[#C47335] text-white font-bold py-2 px-4 border-b-4 border-[#56351E] hover:border-amber-900 rounded;
+}
+
+.dropdown {
+  @apply block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200;
 }
