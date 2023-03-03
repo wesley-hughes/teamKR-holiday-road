@@ -94,7 +94,7 @@ const holidayUserObj = JSON.parse(localStorage.getItem("holiday_user"))
       userId: holidayUserObj.id
     }
     saveNewItinerary(newItinerary)
-    // .then(() => navigate("/itinerary/saved"))
+    .then(() => navigate("/itinerary/builder"))
   }
 
   if (parks === 0) {
@@ -165,6 +165,9 @@ const holidayUserObj = JSON.parse(localStorage.getItem("holiday_user"))
         {
         filteredItin.map((savedItin) => <SavedItineraries key={`myItin--${savedItin.id}`}
         thisItin={savedItin}
+        bizId={savedItin.bizId}
+        eateryId={savedItin.eateryId}
+        parkId={savedItin.parkId}
                 />)
         }
       </article>
