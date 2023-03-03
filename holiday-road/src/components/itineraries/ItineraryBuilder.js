@@ -162,9 +162,11 @@ const holidayUserObj = JSON.parse(localStorage.getItem("holiday_user"))
 
       <h2>Saved Itineraries</h2>  
       <article className="savedItin">
-        {filteredItin.map((savedItin) => <SavedItineraries key={`myItin--${savedItin.id}`}
-        // Need to pass down props of all matching names
-        />)}
+        {
+        filteredItin.map((savedItin) => <SavedItineraries key={`myItin--${savedItin.id}`}
+        thisItin={savedItin}
+                />)
+        }
       </article>
       {/* {
         itinerary.parkId !== "" ?
