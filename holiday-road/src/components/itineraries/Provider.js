@@ -87,13 +87,13 @@ export const Provider = (props) => {
   };
 
   const getGeoCodes = (city, state) => {
-    return fetch(`https://graphhopper.com/api/1/geocode?q=${city},${state}&key=5f45e565-75a1-4937-8ac8-e7604b0c254f&type=json&points_encoded=false`)
+    return fetch(`https://graphhopper.com/api/1/geocode?q=${city},${state},United%20States&key=5f45e565-75a1-4937-8ac8-e7604b0c254f&type=json&points_encoded=false`)
       .then(response => response.json())
       .then(res => res.hits[0].point)
   }
 
   const getRoute = (lat1, long1, lat2, long2, lat3, long3, lat4, long4) => {
-    return fetch(`https://graphhopper.com/api/1/route?point=${lat1},${long1}&point=${lat2},${long2}&vehicle=car&debug=true&key=5f45e565-75a1-4937-8ac8-e7604b0c254f&type=json&points_encoded=false`)
+    return fetch(`https://graphhopper.com/api/1/route?point=${lat1},${long1}&point=${lat2},${long2}&point=${lat3},${long3}&point=${lat4},${long4}&vehicle=car&debug=true&key=5f45e565-75a1-4937-8ac8-e7604b0c254f&type=json&points_encoded=false`)
       .then(response => response.json())
   }
 
