@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { TripContext } from "./Provider";
 
 //props from itineraryBuilder of matched objects
@@ -15,6 +16,7 @@ export const SavedItineraries = ({
   const [thisBiz, setThisBiz] = useState({});
   const [thisEatery, setThisEatery] = useState({});
   const [itinerary, setItinerary] = useState({});
+  const navigate = useNavigate()
 
   useEffect(() => {
     setItinerary(thisItin);
@@ -33,6 +35,10 @@ export const SavedItineraries = ({
         <div>{thisPark?.fullName}</div>
         <div>{thisBiz?.name}</div>
         <div>{thisEatery?.businessName}</div>
+        <div>
+          <button type="button" onClick={() => navigate(`/itinerary/saved/${savedItinId}/directions`)}>
+            Directions</button>
+        </div>
         <div className="bottom-0 right-0">
           <button
             type="button"
