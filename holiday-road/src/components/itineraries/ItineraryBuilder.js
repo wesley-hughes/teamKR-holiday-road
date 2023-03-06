@@ -226,7 +226,7 @@ export const ItineraryBuilder = () => {
         <dialog ref={parkDialog}>
           <div>{selectPark.description}</div>
           <button
-            className="button--close"
+            className="button"
             onClick={(e) => {
               parkDialog.current.close();
               setModal(false);
@@ -238,7 +238,7 @@ export const ItineraryBuilder = () => {
         <dialog ref={bizDialog}>
           <div>{biz.description}</div>
           <button
-            className="button--close"
+            className="button"
             onClick={(e) => {
               bizDialog.current.close();
               setModal(false);
@@ -250,7 +250,7 @@ export const ItineraryBuilder = () => {
         <dialog ref={eateryDialog}>
           <div>{eatery.description}</div>
           <button
-            className="button--close"
+            className="button"
             onClick={(e) => {
               eateryDialog.current.close();
               setModal(false);
